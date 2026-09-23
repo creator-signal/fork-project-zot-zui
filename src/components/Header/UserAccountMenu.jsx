@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 
-import { Menu, MenuItem, IconButton, Avatar, Divider } from '@mui/material';
+import { Menu, MenuItem, IconButton, Avatar, Divider, ListItemText, Select } from '@mui/material';
 
 import { getLoggedInUser, logoutUser, isApiKeyEnabled } from '../../utilities/authUtilities';
 import { useNavigate } from 'react-router';
+import { useThemeMode } from '../../ThemeModeContext';
 
 function UserAccountMenu() {
   const [anchorEl, setAnchorEl] = useState(null);
   const openMenu = Boolean(anchorEl);
   const navigate = useNavigate();
+  const { mode, setMode } = useThemeMode();
 
   const apiKeyManagement = () => {
     navigate('/user/apikey');
@@ -43,6 +45,19 @@ function UserAccountMenu() {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={handleUserClose}>{getLoggedInUser()}</MenuItem>
+        <Divider />
+        <MenuItem disableRipple onClick={(event) => event.stopPropagation()}>
+          <ListItemText primary="Theme" />
+          <Select
+            value={mode}
+            onChange={(event) => setMode(event.target.value)}
+            inputProps={{ 'aria-label': 'Theme', 'data-testid': 'theme-selector' }}
+            size="small"
+          >
+            <MenuItem value="light">Light</MenuItem>
+            <MenuItem value="dark">Dark</MenuItem>
+          </Select>
+        </MenuItem>
         <Divider />
         {isApiKeyEnabled() && (
           <MenuItem onClick={apiKeyManagement} data-testid="api-keys-menu-item">

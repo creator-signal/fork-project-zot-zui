@@ -60,7 +60,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
 
-  background-color: #f6f7f9 !important;
+  background-color: var(--zot-page-background, #f6f7f9) !important;
 }
 
 code {
