@@ -7,30 +7,48 @@ import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { createRoot } from 'react-dom/client';
+import { ThemeModeProvider, useThemeMode } from './ThemeModeContext';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      light: '#757ce8',
-      main: '#14191F',
-      dark: '#002884',
-      contrastText: '#fff'
-    },
-    secondary: {
-      light: '#ff7961',
-      main: '#0F2139',
-      dark: '#52637A',
-      contrastText: '#000'
+const getTheme = (mode) => {
+  const theme = createTheme({
+    palette: {
+      mode,
+      primary: {
+        light: '#757ce8',
+        main: '#14191F',
+        dark: '#002884',
+        contrastText: '#fff'
+      },
+      secondary: {
+        light: '#ff7961',
+        main: '#0F2139',
+        dark: '#52637A',
+        contrastText: '#000'
+      },
+      background: mode === 'dark' ? { default: '#10161d', paper: '#18222e' } : { default: '#f6f7f9', paper: '#fff' },
+      text: mode === 'dark' ? { primary: '#f6f7f9', secondary: '#c4ceda' } : undefined
     }
-  }
-});
+  });
 
-theme.typography.h4 = {
-  fontSize: '2.5rem',
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '1.5rem'
-  }
+  theme.typography.h4 = {
+    fontSize: '2.5rem',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1.5rem'
+    }
+  };
+  return theme;
 };
+
+function ThemedApplication() {
+  const { mode } = useThemeMode();
+  return (
+    <ThemeProvider theme={getTheme(mode)}>
+      <LocalizationProvider dateAdapter={AdapterLuxon}>
+        <App />
+      </LocalizationProvider>
+    </ThemeProvider>
+  );
+}
 
 const container = document.getElementById('root');
 const root = createRoot(container);
@@ -38,11 +56,9 @@ const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
-        <LocalizationProvider dateAdapter={AdapterLuxon}>
-          <App />
-        </LocalizationProvider>
-      </ThemeProvider>
+      <ThemeModeProvider>
+        <ThemedApplication />
+      </ThemeModeProvider>
     </StyledEngineProvider>
   </React.StrictMode>
 );

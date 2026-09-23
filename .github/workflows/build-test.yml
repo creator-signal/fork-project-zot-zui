@@ -4,9 +4,9 @@ name: Build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "creator-signal/main" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "creator-signal/main" ]
   release:
     types:
       - published
@@ -56,25 +56,25 @@ jobs:
         tag: ${{ github.ref }}
         overwrite: true
 
-    - name: Generate commit sha
-      if: github.ref_name == 'main'
+    - name: Generate Creator Signal commit sha
+      if: github.ref_name == 'creator-signal/main'
       uses: benjlevesque/short-sha@v2.1
       # This creates and environment variable SHA containing the short commit ID
 
-    - name: Create new tag for builds on main branch
-      if: github.ref_name == 'main'
+    - name: Create immutable Creator Signal tag
+      if: github.ref_name == 'creator-signal/main'
       uses: mathieudutour/github-tag-action@v6.1
       with:
-        custom_tag: commit-${{ env.SHA }}
+        custom_tag: cs-${{ env.SHA }}
         tag_prefix: ""
         github_token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Publish artifact for builds on main branch
-      if: github.ref_name == 'main'
+    - name: Publish artifact for Creator Signal reconciliation builds
+      if: github.ref_name == 'creator-signal/main'
       uses: svenstaro/upload-release-action@29e53e917877a24fad85510ded594ab3c9ca12de # latest
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: /tmp/zui.tgz
-        tag: commit-${{ env.SHA }}
+        tag: cs-${{ env.SHA }}
         prerelease: true  # Mark as prerelease and avoid triggering another workflow for the new tag
         overwrite: true

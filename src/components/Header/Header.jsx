@@ -12,7 +12,6 @@ import UserAccountMenu from './UserAccountMenu';
 import makeStyles from '@mui/styles/makeStyles';
 import logo from '../../assets/zotLogoWhite.svg';
 import logoxs from '../../assets/zotLogoWhiteSmall.svg';
-import githubLogo from '../../assets/Git.png';
 
 const useStyles = makeStyles((theme) => ({
   barOpen: {
@@ -149,11 +148,6 @@ function Header({ setSearchCurrentValue = () => {} }) {
               </Link>
             </Grid>
             <Grid item className={classes.headerLinkContainer}>
-              <a className={classes.link} href="https://zotregistry.dev" target="_blank" rel="noreferrer">
-                Product
-              </a>
-            </Grid>
-            <Grid item className={classes.headerLinkContainer}>
               <a
                 className={classes.link}
                 href="https://zotregistry.dev/v2.0.0/general/concepts/"
@@ -168,11 +162,6 @@ function Header({ setSearchCurrentValue = () => {} }) {
             {path !== '/' && <SearchSuggestion setSearchCurrentValue={setSearchCurrentValue} />}
           </Grid>
           <Grid item container xs={2} md={3} spacing="1.5rem" className={`${classes.gridItem}`}>
-            <Grid item className={classes.headerLinkContainer}>
-              <a className={classes.link} href="https://github.com/project-zot/zot" target="_blank" rel="noreferrer">
-                <img alt="github repository" src={githubLogo} className={classes.logo} />
-              </a>
-            </Grid>
             {isAuthenticated() && isAuthenticationEnabled() && (
               <Grid item>
                 <UserAccountMenu />

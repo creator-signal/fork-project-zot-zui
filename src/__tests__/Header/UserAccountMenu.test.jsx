@@ -37,4 +37,11 @@ describe('Account Menu', () => {
     expect(await screen.queryByTestId('api-keys-menu-item')).not.toBeInTheDocument();
     expect(await screen.queryByTestId('api-keys-menu-item-divider')).not.toBeInTheDocument();
   });
+
+  it('offers an authenticated user a theme selector', async () => {
+    mockIsApiKeyEnabled.mockReturnValue(false);
+    render(<UserAccountMenu />);
+    fireEvent.click(await screen.getByTestId('user-icon-header-button'));
+    expect(await screen.getByTestId('theme-selector')).toHaveValue('light');
+  });
 });
